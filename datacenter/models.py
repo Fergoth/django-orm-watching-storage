@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.timezone import localtime
 
+
 class Passcard(models.Model):
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
@@ -35,7 +36,7 @@ class Visit(models.Model):
         formatted_duration += f'{hours:02d} ч {minutes:02d} мин'
         return formatted_duration
 
-    def is_long(self, minutes = 60):
+    def is_long(self, minutes=60):
         return self.get_duration().total_seconds() > minutes * 60
 
     def __str__(self):
