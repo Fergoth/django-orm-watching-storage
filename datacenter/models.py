@@ -20,6 +20,16 @@ class Visit(models.Model):
     entered_at = models.DateTimeField()
     leaved_at = models.DateTimeField(null=True)
 
+    def __str__(self):
+        return '{user} entered at {entered} {leaved}'.format(
+            user=self.passcard.owner_name,
+            entered=self.entered_at,
+            leaved=(
+                f'leaved at {self.leaved_at}'
+                if self.leaved_at else 'not leaved'
+            )
+        )
+
     def get_duration(self):
         if self.leaved_at:
             return self.leaved_at - self.entered_at
@@ -41,13 +51,3 @@ class Visit(models.Model):
     def is_long(self, minutes=60):
         seconds_limit = minutes * 60
         return self.get_duration().total_seconds() > seconds_limit
-
-    def __str__(self):
-        return '{user} entered at {entered} {leaved}'.format(
-            user=self.passcard.owner_name,
-            entered=self.entered_at,
-            leaved=(
-                f'leaved at {self.leaved_at}'
-                if self.leaved_at else 'not leaved'
-            )
-        )
