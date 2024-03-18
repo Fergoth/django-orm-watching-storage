@@ -26,18 +26,21 @@ class Visit(models.Model):
         return localtime() - self.entered_at
 
     def format_duration(self) -> str:
+        seconds_in_hour = 3600
+        seconds_in_minute = 60
         formatted_duration = ''
         td = self.get_duration()
         days, seconds = td.days, td.seconds
         if days:
             formatted_duration += f'{days:02d} д.'
-        hours = seconds // 3600
-        minutes = (seconds % 3600) // 60
+        hours = seconds // seconds_in_hour
+        minutes = (seconds % seconds_in_hour) // seconds_in_minute
         formatted_duration += f'{hours:02d} ч {minutes:02d} мин'
         return formatted_duration
 
     def is_long(self, minutes=60):
-        return self.get_duration().total_seconds() > minutes * 60
+        seconds_limit = minutes * 60
+        return self.get_duration().total_seconds() > seconds_limit
 
     def __str__(self):
         return '{user} entered at {entered} {leaved}'.format(
